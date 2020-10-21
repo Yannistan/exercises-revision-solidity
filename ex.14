@@ -1,0 +1,49 @@
+ // SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+import "./CalcToken.sol";
+contract FirstIco {
+    // Declare a FirstErc20 contract
+    FirstErc20 public Calc;
+
+    // The price of 1 unit of our token in wei;
+    uint256 public _price;
+
+    // Address of token seller
+    address payable private _seller;
+    
+    // Address de l'owner (celui qui a deployé le cntrat)
+    address private owner;
+
+   
+    constructor(uint256 price, address payable seller, address erc20Address ) public {
+        _price = price;
+        _seller = seller;
+        //Token is deployed at 0xac5F7C280cC297C8529d48609188ED7f96974d52
+        Calc = FirstErc20(erc20Address);
+        owner = msg.sender;
+        
+    }
+
+    receive() external payable {
+        //require(msg.sender == owner, "Only the person who deployed the contrat can receive the tokens.")
+        buy(msg.value / _price);
+    }
+    
+    function buy(uint256 nbTokens) public payable returns(bool){
+       
+        require(msg.value >= 0, "ICO: Price is not 0 ether");
+        require(nbTokens * _price <= msg.value, "ICO: Not enough Ether for purchase");
+        uint256 _realPrice = nbTokens * _price;
+        uint256 _remaining = msg.value - _realPrice;
+        Calc.transferFrom(_seller, msg.sender, nbTokens);
+        _seller.transfer(_realPrice);
+        if(_remaining > 0) {
+            msg.sender.transfer(_remaining);
+        }
+        return true;
+    }
+    
+}
+
+Adresse du contrat: 0x2c3BD480Af11e639BAbD75FfdA75675eAc9b5f92
+

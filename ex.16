@@ -1,0 +1,36 @@
+ Address Adder: 0x05b65B9F2d8091eAbCB54C4627165f92d4f5dB73
+ Address Suber: 0x0289D75e6d47aAAcb72f33E801EC8710744D82aD
+ Address Multiplier: 0x385d6EB9DdA8c0EAf4305a0Dca37306D53810B14
+ Address Divisor: 0x99e0fee202A09462d359D63A3b60759FC95bA9c6
+ Address Calculator : 0x05b65B9F2d8091eAbCB54C4627165f92d4f5dB73
+ Address Ico: 0xA593Fd7c3fC3f1Ec14FAeF75a3d425Df26C69fce
+
+// SPDX-License-Identifier: MIT                 
+pragma solidity >=0.6.0;
+//pragma experimental ABIEncoderV2;
+
+
+contract Adder {
+    address _add;
+    address admin;
+  constructor() public {
+        
+        admin = msg.sender;
+        
+    }
+     modifier onlyAdmin() {
+    require(msg.sender == admin, 'Only admin can call this function');
+    _;
+  }
+  
+  function setCalculatorAddress(address _addcalc) public onlyAdmin {
+      _add = _addcalc;
+  }
+  
+  function add(uint256 nb1, uint256 nb2) public view returns (uint256) {
+    return nb1 + nb2;
+  }
+  
+}
+
+Les codes Suber, Multiplier et Divisor sont modifiés de la même manière. 

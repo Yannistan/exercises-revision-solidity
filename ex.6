@@ -1,0 +1,31 @@
+ // SPDX-License-Identifier: MIT
+pragma solidity >=0.4.16 <0.8.0;
+pragma experimental ABIEncoderV2;
+
+contract Contact {
+
+    struct Info {
+     string name;
+     string email;
+     string phone;
+}
+ 
+mapping (address => Info) public _info;
+   Info contact1;
+   
+  function addContact(address _addether, string memory _name, string memory _email, string memory _phone) public {
+       
+       contact1.name = _name;
+       contact1.email = _email;
+       contact1.phone = _phone;
+        _info[_addether] = contact1;
+    }
+    
+    function getContact(address _addr) public returns (Info memory) {
+        return _info[_addr];
+    }
+ 
+    
+}
+
+
