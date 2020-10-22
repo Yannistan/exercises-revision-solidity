@@ -7,8 +7,9 @@ import './Divisor.sol';
 import './CalcToken.sol';
 
 contract Calculator {
-    
+    address _add;
     address private owner;
+     mapping (address => uint256) private _balances;
     //FirstErc20 private token;
     Adder private adder;
     Suber private suber;
@@ -20,6 +21,7 @@ contract Calculator {
         suber = Suber(_suber);
         multiplier = Multiplier(_multiplier);
         divisor = Divisor(_divisor);
+         _add = address(this);
         owner = msg.sender;
     }
     
@@ -38,7 +40,16 @@ contract Calculator {
     function div(uint256 nb1, uint256 nb2) public view returns(uint256) {
         return divisor.div(nb1, nb2);
     }
-  
+  function transfer(address _recipient, uint256 _amount) public returns (bool) {
+    require(
+      _balances[msg.sender] >= _amount,
+      'ERC20: transfer amount exceeds balance'
+    );
+    _balances[msg.sender] -= _amount;
+    _balances[_recipient] += _amount;
+ //   emit Transfer(msg.sender, _recipient, _amount);
+    return true;
+  }
     
      modifier onlyOwner() {
     require(msg.sender == owner, 'Only owner can use this function');
@@ -46,11 +57,9 @@ contract Calculator {
   }
     
     function withdraw() public onlyOwner {
-        transfer(msg.sender, address(this)._balances);
+        transfer(msg.sender, _balances[_add]);
     }
     
 }   
     
-    
-    
-    
+
